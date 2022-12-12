@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
-import { carousel } from "../data/homedata";
+import { carousel } from "../data/data";
 
 const Carousel = () => {
   const [activeSlide, setActiveSlide] = useState(1);
@@ -26,7 +26,7 @@ const Carousel = () => {
   };
 
   return (
-    <div className="m-6">
+    <div className="">
       {carousel.map((item, index) => {
         return (
           <div
@@ -38,10 +38,10 @@ const Carousel = () => {
             }
           >
             <button
-              className="text-6xl border-2 border-black"
+              className="text-6xl border-2 transition ease-in-out delay-150 bg-rose-500 hover:-translate-y-1 hover:scale-110 hover:bg-orange-400 duration-300"
               onClick={() => prevSliderHandler(index)}
             >
-              <FiChevronLeft />
+              <FiChevronLeft className="text-white" />
             </button>
             <div className=" w-full h-[500px]">
               <img
@@ -51,10 +51,10 @@ const Carousel = () => {
               />
             </div>
             <button
-              className="text-6xl border-2 border-black"
+              className="text-6xl border-2 transition ease-in-out delay-150 bg-rose-500 hover:-translate-y-1 hover:scale-110 hover:bg-orange-400 duration-300"
               onClick={() => nextSliderHandler(index)}
             >
-              <FiChevronRight />
+              <FiChevronRight className="text-white" />
             </button>
           </div>
         );

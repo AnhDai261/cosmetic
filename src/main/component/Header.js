@@ -1,4 +1,5 @@
 import React from "react";
+import { FiShoppingBag } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { images } from "../../dashboard/data/skin";
 import SupportHeader from "./SupportHeader";
@@ -8,8 +9,8 @@ const Header = () => {
     <div>
       <SupportHeader />
       <header>
-        <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
-          <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+        <nav class="bg-rose-50 border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
+          <div class="py-4 flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
             <Link
               to="/"
               className="text-xl font-bold flex items-center lg:ml-2.5"
@@ -117,7 +118,7 @@ const Header = () => {
                     href="#"
                     class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
                   >
-                    Contact
+                    <FiShoppingBag className="text-3xl" />
                   </a>
                 </li>
               </ul>

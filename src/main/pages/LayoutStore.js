@@ -2,17 +2,17 @@ import React from "react";
 import ButtonGoTop from "../component/ButtonGoTop";
 import Footer from "../component/Footer";
 import Header from "../component/Header";
-import Index from "./index";
+import Store from "../component/Store";
 
-const LayoutAuth = () => {
+const LayoutStore = () => {
   return (
     <div>
       <Header />
-      <Index />
+      <Store />
       <Footer />
       <ButtonGoTop />
     </div>
   );
 };
 
-export default LayoutAuth;
+export default LayoutStore;

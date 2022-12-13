@@ -1,5 +1,6 @@
 import React from "react";
 import Carousel from "../component/Carousel";
+import BotCarousel from "../component/BotCarousel";
 import { brandcards, images } from "../data/data";
 
 const Index = () => {
@@ -82,9 +83,13 @@ const Index = () => {
 
       {/* Content  */}
       <div>
-        <img src={images.middlebanner} />
+        <img src={images.middlebanner} alt="MiddleBanner" />
       </div>
+
       <div className="bg-rose-50 h-10"></div>
+
+      {/* Bot Carousel */}
+      <BotCarousel />
     </div>
   );
 };

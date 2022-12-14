@@ -1,10 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FiShoppingBag } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { images } from "../data/data";
 import SupportHeader from "./SupportHeader";
 
 const Header = () => {
+  const [state, setState] = useState(null);
+  useEffect(() => {
+    const items = JSON.parse(localStorage.getItem("currentUser"));
+    if (items) {
+      setState(items);
+    }
+  }, []);
+
+  const logoutUser = async () => {
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify({
+        email: null,
+        fullName: null,
+      })
+    );
+    const items = JSON.parse(localStorage.getItem("currentUser"));
+    if (items) {
+      setState(items);
+    }
+  };
+
   return (
     <div>
       <header className="fixed top-0 left-0 z-20 w-full shadow dark:bg-gray-800 dark:border-gray-600">
@@ -22,22 +44,44 @@ const Header = () => {
             <div class="flex items-center lg:order-2">
               <Link
                 to="/cart"
-                class="block py-2 pr-4 pl-3 text-gray-700 border-b lg:hover:bg-transparent lg:border-0 hover:text-rose-500 lg:hover:text-rose-500 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-rose-500 dark:hover:text-rose lg:dark:hover:bg-transparent dark:border-gray-700"
+                class="block py-2 lg:mr-4 px-2 text-gray-700 border-b lg:hover:bg-transparent lg:border-0 hover:text-rose-500 lg:hover:text-rose-500 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-rose-500 dark:hover:text-rose lg:dark:hover:bg-transparent dark:border-gray-700"
               >
-                <FiShoppingBag className="text-3xl" />
+                <FiShoppingBag className="text-xl lg:text-3xl" />
               </Link>
-              <Link
-                to="/signin"
-                class="text-gray-800 dark:text-white hover:bg-rose-100 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
-              >
-                Sign In
-              </Link>
-              <Link
-                to="/signup"
-                class="text-white bg-rose-500 hover:bg-rose-700 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-rose-500 dark:hover:bg-rose-600 focus:outline-none dark:focus:ring-rose-600"
-              >
-                Sign Up?
-              </Link>
+              {/* SignIn SignUP  */}
+              {state && state.email !== null ? (
+                <>
+                  <p>
+                    Xin chào{" "}
+                    <span className="text-rose-500 font-medium">
+                      {" "}
+                      {`${state.fullName}`}
+                    </span>{" "}
+                  </p>
+                  <h2
+                    className="cursor-pointer bg-rose-400 text-base text-white rounded-2xl ml-4 py-2 px-6 hover:bg-rose-600"
+                    onClick={() => logoutUser()}
+                  >
+                    Đăng xuất
+                  </h2>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/signin"
+                    class="text-gray-800 dark:text-white hover:bg-rose-100 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/signup"
+                    class="text-white bg-rose-500 hover:bg-rose-700 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-rose-500 dark:hover:bg-rose-600 focus:outline-none dark:focus:ring-rose-600"
+                  >
+                    Sign Up?
+                  </Link>
+                </>
+              )}
+
               <button
                 data-collapse-toggle="mobile-menu-2"
                 type="button"
@@ -81,7 +125,7 @@ const Header = () => {
                   <Link
                     to="/"
                     defaultChecked="false"
-                    class="block py-2 pr-4 pl-3 text-gray-700 rounded bg-rose-700 lg:bg-transparent lg:text-rose-700 lg:p-0 dark:text-rose-50"
+                    class="block py-2 pr-4 pl-3 text-gray-700 border-b border-rose-100 hover:bg-rose-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-rose-400 lg:p-0 dark:text-rose-200 lg:dark:hover:text-rose-200 dark:hover:bg-rose-700 dark:hover:text-rose-50 lg:dark:hover:bg-transparent dark:border-rose-600"
                     aria-current="page"
                   >
                     Home
@@ -104,12 +148,12 @@ const Header = () => {
                   </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    to="/contact"
                     class="block py-2 pr-4 pl-3 text-gray-700 border-b border-rose-100 hover:bg-rose-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-rose-400 lg:p-0 dark:text-rose-200 lg:dark:hover:text-rose-200 dark:hover:bg-rose-700 dark:hover:text-rose-50 lg:dark:hover:bg-transparent dark:border-rose-600"
                   >
                     Contact Us
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -126,18 +170,24 @@ const Header = () => {
               </span>
             </Link>
             <div class="flex items-center lg:order-2">
-              <a
-                href="#"
+              <Link
+                to="/cart"
+                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-rose-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-rose-500 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-rose-500 dark:hover:text-rose lg:dark:hover:bg-transparent dark:border-gray-700"
+              >
+                <FiShoppingBag className="text-3xl" />
+              </Link>
+              <Link
+                to="/signin"
                 class="text-gray-800 dark:text-white hover:bg-rose-100 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
               >
-                Log in
-              </a>
-              <a
-                href="#"
+                Sign Up
+              </Link>
+              <Link
+                to="/signup"
                 class="text-white bg-rose-400 hover:bg-rose-600 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-rose-400 dark:hover:bg-rose-600 focus:outline-none dark:focus:ring-rose-600"
               >
-                Get started
-              </a>
+                Sign In
+              </Link>
               <button
                 data-collapse-toggle="mobile-menu-2"
                 type="button"
@@ -187,43 +237,27 @@ const Header = () => {
                   </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    to="/about"
                     class="block py-2 pr-4 pl-3 text-gray-700 border-b border-rose-100 hover:bg-rose-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-rose-400 lg:p-0 dark:text-rose-200 lg:dark:hover:text-rose-200 dark:hover:bg-rose-700 dark:hover:text-rose-50 lg:dark:hover:bg-transparent dark:border-rose-600"
                   >
                     About Us
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="block py-2 pr-4 pl-3 text-gray-700 border-b border-rose-100 hover:bg-rose-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-rose-400 lg:p-0 dark:text-rose-200 lg:dark:hover:text-rose-200 dark:hover:bg-rose-700 dark:hover:text-rose-50 lg:dark:hover:bg-transparent dark:border-rose-600"
-                  >
-                    Store
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="block py-2 pr-4 pl-3 text-gray-700 border-b border-rose-100 hover:bg-rose-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-rose-400 lg:p-0 dark:text-rose-200 lg:dark:hover:text-rose-200 dark:hover:bg-rose-700 dark:hover:text-rose-50 lg:dark:hover:bg-transparent dark:border-rose-600"
-                  >
-                    Contact Us
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="block py-2 pr-4 pl-3 text-gray-700 border-b border-rose-100 hover:bg-rose-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-rose-400 lg:p-0 dark:text-rose-200 lg:dark:hover:text-rose-200 dark:hover:bg-rose-700 dark:hover:text-rose-50 lg:dark:hover:bg-transparent dark:border-rose-600"
-                  >
-                    Team
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <Link
-                    to="/cart"
-                    class="block py-2 pr-4 pl-3 text-gray-700 border-b border-rose-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-rose-500 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-rose-500 dark:hover:text-rose lg:dark:hover:bg-transparent dark:border-gray-700"
+                    to="/store"
+                    class="block py-2 pr-4 pl-3 text-gray-700 border-b border-rose-100 hover:bg-rose-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-rose-400 lg:p-0 dark:text-rose-200 lg:dark:hover:text-rose-200 dark:hover:bg-rose-700 dark:hover:text-rose-50 lg:dark:hover:bg-transparent dark:border-rose-600"
                   >
-                    <FiShoppingBag className="text-3xl" />
+                    Store
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/contact"
+                    class="block py-2 pr-4 pl-3 text-gray-700 border-b border-rose-100 hover:bg-rose-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-rose-400 lg:p-0 dark:text-rose-200 lg:dark:hover:text-rose-200 dark:hover:bg-rose-700 dark:hover:text-rose-50 lg:dark:hover:bg-transparent dark:border-rose-600"
+                  >
+                    Contact Us
                   </Link>
                 </li>
               </ul>

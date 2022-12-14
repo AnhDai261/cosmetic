@@ -1,24 +1,21 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { cards } from "../data/data";
+// import { cards } from "../data/data";
 
-const Cart = () => {
-  //   const [product, setProduct] = useState([]);
-  //   useEffect(() => {
-  //     setProduct(cards);
-  //   });
-  //   useEffect(() => {
-  //     axios.get("http://localhost:6969/api/getAllItem").then((res) => {
-  //       let data = res.data.data;
-  //       setProduct(data);
-  //     });
-  //   }, []);
+const Card = () => {
+  const [product, setProduct] = useState([]);
+  useEffect(() => {
+    axios.get("http://localhost:6969/api/getAllItem").then((res) => {
+      let data = res.data.data;
+      setProduct(data);
+    });
+  }, []);
 
   return (
     <div>
       <div className="flex flex-wrap items-center justify-center gap-4 container mx-auto px-0">
-        {cards.map((item, index) => {
+        {product.map((item, index) => {
           return (
             <div
               key={index}
@@ -29,8 +26,8 @@ const Cart = () => {
                   class="w-400 h-72 aspect-[3/2] rounded-lg object-cover object-top border border-gray-200"
                   src={item.image}
                 />
-                <h5 class="capitalize mb-1 text-xl font-medium text-gray-900 dark:text-white">
-                  {item.title}
+                <h5 class="capitalize mb-2 mt-4 lg:mb-6 lg:mt-6 text-xl font-medium text-gray-900 dark:text-white">
+                  {item.name}
                 </h5>
                 <span class="text-sm text-gray-500 dark:text-gray-400">
                   {item.price.toLocaleString()} vnđ
@@ -52,4 +49,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default Card;

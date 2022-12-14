@@ -9,7 +9,10 @@ import LayoutStore from "./main/pages/LayoutStore";
 import SignIn from "./main/component/SignIn";
 import SignUp from "./main/component/SignUp";
 import LayoutCart from "./main/pages/LayoutCart";
-import Contact from "./main/component/Contact";
+import LayoutContact from "./main/pages/LayoutContact";
+import CheckOut from "./main/component/CheckOut";
+import LayoutCheckOut from "./main/pages/LayoutCheckOut";
+import SignInAdmin from "./dashboard/page/SignInAdmin";
 
 function App() {
   return (
@@ -23,7 +26,8 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/cart" element={<LayoutCart />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route path="/contact" element={<LayoutContact />} />
+          <Route path="/checkout" element={<LayoutCheckOut />} />
         </Route>
 
         <Route path="/dashboard">
@@ -44,6 +48,7 @@ function App() {
               </LayoutDashboard>
             }
           />
+          <Route path="/dashboard/signinAdmin" element={<SignInAdmin />} />
         </Route>
       </Routes>
 

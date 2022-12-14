@@ -54,7 +54,7 @@ const Sidebar = () => {
                     <span className="ml-3">Dashboard</span>
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <a
                     href="#"
                     className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
@@ -74,8 +74,8 @@ const Sidebar = () => {
                       Pro
                     </span>
                   </a>
-                </li>
-                <li>
+                </li> */}
+                {/* <li>
                   <a
                     href="#"
                     className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
@@ -94,7 +94,7 @@ const Sidebar = () => {
                       Pro
                     </span>
                   </a>
-                </li>
+                </li> */}
                 <li>
                   <a
                     href="#"

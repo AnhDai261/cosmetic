@@ -42,10 +42,7 @@ const Header = () => {
               </span>
             </Link>
             <div class="flex items-center lg:order-2">
-              <Link
-                to="/cart"
-                class="block py-2 lg:mr-4 px-2 text-gray-700 border-b lg:hover:bg-transparent lg:border-0 hover:text-rose-500 lg:hover:text-rose-500 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-rose-500 dark:hover:text-rose lg:dark:hover:bg-transparent dark:border-gray-700"
-              >
+              <Link class="block py-2 lg:mr-4 px-2 text-gray-700 border-b lg:hover:bg-transparent lg:border-0 hover:text-rose-500 lg:hover:text-rose-500 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-rose-500 dark:hover:text-rose lg:dark:hover:bg-transparent dark:border-gray-700">
                 <FiShoppingBag className="text-xl lg:text-3xl" />
               </Link>
               {/* SignIn SignUP  */}

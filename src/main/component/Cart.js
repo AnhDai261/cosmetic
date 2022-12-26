@@ -30,15 +30,10 @@ const products = [
   },
 ];
 
-const Cart = () => {
-  const [open, setOpen] = useState(true);
-  const [back, setBack] = useState("/cart");
-
-  const handleBack = (e) => {};
-
+const Cart = ({ toggleCart, open }) => {
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={setOpen}>
+      <Dialog as="div" className="relative z-50" onClose={() => toggleCart()}>
         <Transition.Child
           as={Fragment}
           enter="ease-in-out duration-500"
@@ -74,7 +69,7 @@ const Cart = () => {
                           <button
                             type="button"
                             className="-m-2 p-2 text-gray-400 hover:text-gray-500"
-                            onClick={() => setOpen(false)}
+                            onClick={() => toggleCart()}
                           >
                             <span className="sr-only">Close panel</span>
                             <XMarkIcon className="h-6 w-6" aria-hidden="true" />
@@ -156,7 +151,7 @@ const Cart = () => {
                           <button
                             type="button"
                             className="font-medium text-indigo-600 hover:text-indigo-500"
-                            onClick={() => setOpen(false)}
+                            onClick={() => toggleCart()}
                           >
                             Continue Shopping
                             <span aria-hidden="true"> &rarr;</span>

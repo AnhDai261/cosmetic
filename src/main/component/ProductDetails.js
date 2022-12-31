@@ -8,8 +8,16 @@ import {
 } from "pure-react-carousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
 import Cart from "./Cart";
+import { useNavigate } from "react-router-dom";
 
-const ProductDetail = ({ toggleDetail, data }) => {
+const ProductDetail = ({
+  toggleDetail,
+  data,
+  handleRender,
+  setDataCart,
+  dataCart,
+}) => {
+  const navigate = useNavigate();
   let [state, setState] = useState({
     id: "",
     name: "",
@@ -19,16 +27,6 @@ const ProductDetail = ({ toggleDetail, data }) => {
     image: "",
     describe: "",
   });
-  const [open, setOpen] = useState(false);
-  const toggleCart = () => {
-    // axios.get("http://localhost:6969/api/getAllItem").then((res) => {
-    //   let data = res.data.data;
-    //   setProduct(data);
-    // setUpdate(null);
-    // });
-
-    setOpen(!open);
-  };
 
   useEffect(() => {
     if (data) {
@@ -36,22 +34,57 @@ const ProductDetail = ({ toggleDetail, data }) => {
         id: data.id,
         name: data.name,
         price: data.price,
-        Categorie: data.Categorie,
-        Brand: data.Brand,
+        Categorie: data.Categorie.name,
+        Brand: data.Brand.name,
         image: data.image,
         describe: data.describe,
       });
     }
   }, []);
 
-  console.log("check: ", data);
+  useEffect(() => {
+    const getData = getDataStore();
+    setDataCart(getData);
+  }, []);
+
+  const getDataStore = () => {
+    let getData = JSON.parse(localStorage.getItem("product"));
+    if (getData) {
+      return getData;
+    }
+  };
+
+  const handleAddCart = (arrs) => {
+    // localStorage.getItem("product", JSON.stringify(Arr));
+    if (dataCart && dataCart.length > 0) {
+      let test = dataCart.find((item) => {
+        return item.id === arrs.id;
+      });
+
+      if (test === undefined) {
+        let raBien = dataCart;
+        localStorage.setItem("product", JSON.stringify([...raBien, arrs]));
+        setDataCart([...raBien, arrs]);
+        handleRender();
+        toggleDetail();
+      } else {
+        console.log("Co tim thay ne: ", test);
+        toggleDetail();
+      }
+    } else {
+      let Arr = [];
+      if (arrs) {
+        Arr.push(arrs);
+      }
+      localStorage.setItem("product", JSON.stringify(Arr));
+      setDataCart(Arr);
+      handleRender();
+      toggleDetail();
+    }
+  };
+  console.log("coi datacart L ", dataCart);
   return (
     <div>
-      {open ? (
-        <>
-          <Cart open={open} toggleCart={() => toggleCart()} />
-        </>
-      ) : null}
       <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
         <div className="relative w-auto my-6 mx-auto max-w-3xl">
           <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
@@ -91,7 +124,7 @@ const ProductDetail = ({ toggleDetail, data }) => {
                       <div className="flex items-center">
                         <ButtonBack
                           aria-label="slide back"
-                          className="focus:outline-none focus:ring-2 focus:ring-gray-800 hover:bg-gray-100"
+                          className="focus:outline-none  hover:bg-gray-100"
                           role="button"
                         >
                           <svg
@@ -147,7 +180,7 @@ const ProductDetail = ({ toggleDetail, data }) => {
                         <ButtonNext
                           role="button"
                           aria-label="next slide"
-                          className="cursor-pointer ml-2"
+                          className="cursor-pointer ml-2 hover:bg-gray-100"
                         >
                           <svg
                             className="w-10 h-10 lg:w-16 lg:h-16"
@@ -174,16 +207,23 @@ const ProductDetail = ({ toggleDetail, data }) => {
                         {state.describe}
                       </p>
                       <p className="text-3xl font-medium text-gray-600 mt-8 md:mt-10">
-                        {state.price.toLocaleString()} vnđ
+                        {/* {state.price.toLocaleString()} vnđ */}
                       </p>
                       <div className="flex items-center flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6 lg:space-x-8 mt-8 md:mt-16">
                         <button
-                          onclick={() => {
-                            toggleCart();
-                          }}
+                          onClick={() =>
+                            handleAddCart({
+                              id: state.id,
+                              name: state.name,
+                              image: state.image,
+                              price: state.price,
+                              brandName: state.Brand,
+                              cateName: state.Categorie,
+                            })
+                          }
                           className="w-full md:w-3/5 border border-gray-800 text-base font-medium leading-none uppercase py-6 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 bg-gray-800 text-white"
                         >
-                          Add to Cart
+                          Add To Cart
                         </button>
                       </div>
                       <div className="mt-6">

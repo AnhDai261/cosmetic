@@ -9,7 +9,8 @@ import {
   PlusIcon,
   Squares2X2Icon,
 } from "@heroicons/react/20/solid";
-import Cart from "./Card";
+import Card from "./Card";
+import axios from "axios";
 
 const sortOptions = [
   { name: "Phổ Biến Nhất", href: "#", current: true },
@@ -73,6 +74,18 @@ const classNames = (...classes) => {
 
 const Categorie = () => {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [dataSearch, setDataSearch] = useState([]);
+  const onSearch = () => {
+    // call api
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/findItem?key=${search}`)
+      .then((res) => {
+        console.log("check value: ", res.data.data);
+        let arr = res.data.data;
+        setDataSearch(arr);
+      });
+  };
 
   return (
     <div className="bg-white">
@@ -384,13 +397,16 @@ const Categorie = () => {
                     </div>
                     <input
                       type="search"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
                       id="default-search"
                       class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="Nước hoa, son dưỡng,..."
                       required
                     />
                     <button
-                      type="submit"
+                      type="button"
+                      onClick={() => onSearch()}
                       class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
                       Search
@@ -399,7 +415,7 @@ const Categorie = () => {
                 </form>
 
                 {/* Cart  */}
-                <Cart />
+                <Card dataSearch={dataSearch} />
 
                 {/* Pagination */}
                 <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
@@ -448,7 +464,7 @@ const Categorie = () => {
                         >
                           1
                         </a>
-                        <a
+                        {/* <a
                           href="#"
                           className="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"
                         >
@@ -480,7 +496,7 @@ const Categorie = () => {
                           className="relative inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"
                         >
                           10
-                        </a>
+                        </a> */}
                         <a
                           href="#"
                           className="relative inline-flex items-center rounded-r-md border border-gray-300 bg-white px-2 py-2 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20"

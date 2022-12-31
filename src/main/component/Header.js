@@ -1,17 +1,38 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FiShoppingBag } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { images } from "../data/data";
+import Cart from "./Cart";
 import SupportHeader from "./SupportHeader";
 
 const Header = () => {
   const [state, setState] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  const [cartNumber, setCartNumber] = useState(0);
   useEffect(() => {
     const items = JSON.parse(localStorage.getItem("currentUser"));
     if (items) {
       setState(items);
     }
   }, []);
+  // const toggleCart = () => {
+  //   axios.get("http://localhost:6969/api/getAllItem").then((res) => {
+  //     let data = res.data.data;
+  //     setProduct(data);
+  //     setUpdate(null);
+  //   });
+
+  //   setOpen(!open);
+  // };
+
+  let getData = JSON.parse(localStorage.getItem("product"));
+  useEffect(() => {
+    if (getData) {
+      setCartNumber(getData.length);
+    }
+  }, [getData]);
 
   const logoutUser = async () => {
     localStorage.setItem(
@@ -27,8 +48,17 @@ const Header = () => {
     }
   };
 
+  const handleOpenCart = () => {
+    setOpen(true);
+  };
+
   return (
     <div>
+      {open ? (
+        <>
+          <Cart open={open} />
+        </>
+      ) : null}
       <header className="fixed top-0 left-0 z-20 w-full shadow dark:bg-gray-800 dark:border-gray-600">
         <nav class="bg-rose-50 border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
           <div class="py-4 flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
@@ -42,8 +72,16 @@ const Header = () => {
               </span>
             </Link>
             <div class="flex items-center lg:order-2">
-              <Link class="block py-2 lg:mr-4 px-2 text-gray-700 border-b lg:hover:bg-transparent lg:border-0 hover:text-rose-500 lg:hover:text-rose-500 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-rose-500 dark:hover:text-rose lg:dark:hover:bg-transparent dark:border-gray-700">
+              <Link
+                onClick={() => handleOpenCart()}
+                class="lg:p-2 hover:text-rose-500 rounded-lg relative"
+              >
                 <FiShoppingBag className="text-xl lg:text-3xl" />
+                {cartNumber === 0 ? null : (
+                  <div className="inline-flex absolute top-0 right-0 justify-center items-center w-4 h-4 text-[10px] font-bold text-white bg-red-500 rounded-full border-2 border-white dark:border-gray-900">
+                    {cartNumber}
+                  </div>
+                )}
               </Link>
               {/* SignIn SignUP  */}
               {state && state.email !== null ? (

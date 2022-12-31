@@ -1,8 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { images } from "../data/data";
 
 const CheckOut = () => {
+  const navigate = useNavigate();
   const [total, setTotal] = useState("");
+  const [state, setState] = useState({
+    fullName: "",
+    address: "",
+    phoneNumber: "",
+    note: "",
+  });
   const countries = [
     "Việt Nam",
     "Mỹ",
@@ -11,12 +20,75 @@ const CheckOut = () => {
     "Lào",
     "Thái Lan",
   ];
-  const [menu, setMenu] = useState(false);
-  const [country, setCountry] = useState("United States");
 
-  const changeText = (e) => {
-    setMenu(false);
-    setCountry(e.target.textContent);
+  const [product, setProduct] = useState([]);
+  const [price, setPrice] = useState([]);
+  const [deleteState, setDeleteState] = useState([]);
+
+  useEffect(() => {
+    let res = getDataStore();
+    if (res && res.length > 0) {
+      handleTotalPrice(res);
+      setProduct(res);
+      checkDelete(res);
+    }
+  }, []);
+
+  const getDataStore = () => {
+    let getData = JSON.parse(localStorage.getItem("product"));
+    if (getData) {
+      return getData;
+    }
+  };
+
+  const handleTotalPrice = (data) => {
+    let arr = [];
+    data.forEach((item) => {
+      arr.push(item.price);
+
+      return arr;
+    });
+    if (arr && arr.length > 0) {
+      let total = arr.reduce((bienNho, thangHienTai) => {
+        return bienNho + thangHienTai;
+      });
+      setPrice(total);
+    }
+  };
+  const checkDelete = (daily) => {
+    setDeleteState(daily);
+  };
+  const handleDelete = (del) => {
+    deleteState.forEach((item) => {
+      if (del === item.id) {
+        localStorage.removeItem("product", [item]);
+        // console.log("cehcheche===+++++", item);
+      }
+    });
+  };
+
+  const handleOnchange = (e, id) => {
+    let copyState = { ...state };
+
+    copyState[id] = e.target.value;
+
+    setState(copyState);
+  };
+
+  const handlePay = () => {
+    if (
+      state.fullName === "" ||
+      state.address === "" ||
+      state.phoneNumber === ""
+    ) {
+      toast.error("Bạn chưa nhập đủ thông tin");
+    } else {
+      toast.success("Đặt hàng thành công");
+      localStorage.removeItem("product");
+      setTimeout(() => {
+        navigate("/store");
+      }, 1000);
+    }
   };
 
   return (
@@ -33,9 +105,51 @@ const CheckOut = () => {
                 <p className="text-base font-semibold leading-none text-gray-600">
                   $520.00
                 </p>
-              </div> */}
+              </div>
               <div className="mt-6 sm:mt-0 xl:my-10 xl:px-20 w-52 sm:w-96 xl:w-auto">
                 <img src={images.logo} alt="headphones" />
+              </div> */}
+              <div className="mt-8">
+                <div className="flow-root">
+                  <ul role="list" className="-my-6 divide-y divide-gray-200">
+                    {product.map((product, index) => (
+                      <li key={index} className="flex py-6">
+                        <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                          <img
+                            src={product.image}
+                            alt="abc"
+                            className="h-full w-full object-cover object-center"
+                          />
+                        </div>
+
+                        <div className="ml-4 flex flex-1 flex-col">
+                          <div>
+                            <div className="flex justify-between text-base font-medium text-gray-900">
+                              <h3 className="pr-2">{product.name}</h3>
+                              <p>{product.price.toLocaleString()} vnđ</p>
+                            </div>
+                            <p className="mt-1 text-sm text-gray-500">
+                              {product.brandName}
+                            </p>
+                          </div>
+                          <div className="flex flex-1 items-end justify-between text-sm">
+                            <p className="text-gray-500">{product.cateName}</p>
+
+                            <div className="flex">
+                              <button
+                                type="button"
+                                onClick={() => handleDelete(product.id)}
+                                className="font-medium text-indigo-600 hover:text-indigo-500"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
 
@@ -75,6 +189,7 @@ const CheckOut = () => {
 
               <div className="mt-8">
                 <input
+                  onChange={(e) => handleOnchange(e, "fullName")}
                   className="border border-gray-300 p-4 rounded w-full text-base leading-4 placeholder-gray-600 text-gray-600"
                   type="text"
                   placeholder="Họ và Tên"
@@ -87,12 +202,13 @@ const CheckOut = () => {
               <div className="mt-2 flex-col">
                 <div>
                   <input
+                    onChange={(e) => handleOnchange(e, "address")}
                     className="border rounded-tl rounded-tr border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-gray-600"
                     type="text"
-                    placeholder="Đường/Xã"
+                    placeholder="Địa chỉ"
                   />
                 </div>
-                <div className="flex-row flex">
+                {/* <div className="flex-row flex">
                   <input
                     className="border rounded-bl border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-gray-600"
                     type="text"
@@ -103,7 +219,7 @@ const CheckOut = () => {
                     type="text"
                     placeholder="Tỉnh/Thành Phố"
                   />
-                </div>
+                </div> */}
               </div>
 
               <label className="mt-8 text-base leading-4 text-gray-800">
@@ -112,6 +228,7 @@ const CheckOut = () => {
               <div className="mt-2 flex-col">
                 <div>
                   <input
+                    onChange={(e) => handleOnchange(e, "phoneNumber")}
                     className="border rounded border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-gray-600"
                     type="email"
                     placeholder="Số điện thoại"
@@ -120,62 +237,23 @@ const CheckOut = () => {
               </div>
 
               <label className="mt-8 text-base leading-4 text-gray-800">
-                Quốc gia
+                Ghi chú
               </label>
               <div className="mt-2 flex-col">
-                <div className="relative">
-                  <button
-                    className="text-left border rounded-tr rounded-tl border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-gray-600 bg-white"
-                    type="email"
-                  >
-                    {country}
-                  </button>
-                  <svg
-                    onClick={() => setMenu(!menu)}
-                    className={
-                      "transform  cursor-pointer absolute top-4 right-4 " +
-                      (menu ? "rotate-180" : "")
-                    }
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M3.5 5.75L8 10.25L12.5 5.75"
-                      stroke="#27272A"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  <div
-                    className={
-                      "mt-1 absolute z-10 w-full flex bg-gray-50 justify-start flex-col text-gray-600 " +
-                      (menu ? "block" : "hidden")
-                    }
-                  >
-                    {countries.map((country) => (
-                      <div
-                        key={country}
-                        className="cursor-pointer hover:bg-gray-800 hover:text-white px-4 py-2"
-                        onClick={changeText}
-                      >
-                        {country}
-                      </div>
-                    ))}
-                  </div>
-                </div>
                 <input
+                  onChange={(e) => handleOnchange(e, "note")}
                   className="border rounded-bl rounded-br border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-gray-600"
                   type="text"
                   placeholder="Ghi chú"
                 />
               </div>
 
-              <button className="mt-8 border border-transparent hover:border-gray-300 bg-gray-900 hover:bg-white text-white hover:text-gray-900 flex justify-center items-center py-4 rounded w-full">
+              <button
+                onClick={() => handlePay()}
+                className="mt-8 border border-transparent hover:border-gray-300 bg-gray-900 hover:bg-white text-white hover:text-gray-900 flex justify-center items-center py-4 rounded w-full"
+              >
                 <div>
-                  <p className="text-base leading-4">Đặt hàng -515616 vnđ</p>
+                  <p className="text-base leading-4">Đặt hàng - {price} vnđ</p>
                 </div>
               </button>
             </div>

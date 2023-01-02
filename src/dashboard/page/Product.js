@@ -80,9 +80,9 @@ const Product = () => {
                 {/*content*/}
                 <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                   <div>
-                    <p>
+                    {/* <p>
                       {update === null ? "Them san pham" : "Chinh sua san pham"}
-                    </p>
+                    </p> */}
                     <button
                       onClick={() => closeModal()}
                       className="bg-blue-700 w-20 px-3 py-2 mt-4 mr-5 text-white float-right rounded-lg"

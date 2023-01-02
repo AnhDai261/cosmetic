@@ -24,7 +24,10 @@ function SignIn() {
     setLoading(true);
     setTimeout(() => {
       axios
-        .post(`http://localhost:6969/api/loginUser`, { email, password })
+        .post(`${process.env.REACT_APP_BACKEND_URL}/api/loginUser`, {
+          email,
+          password,
+        })
         .then((res) => {
           if (res.data.errCode === 0) {
             toast.success(res.data.errMessage);

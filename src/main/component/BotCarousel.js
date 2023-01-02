@@ -17,10 +17,12 @@ export default function BotCarousel() {
   const [product, setProduct] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:6969/api/getAllItem").then((res) => {
-      let data = res.data.data;
-      setProduct(data);
-    });
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/getAllItem`)
+      .then((res) => {
+        let data = res.data.data;
+        setProduct(data);
+      });
   }, []);
   console.log("check product: ", product);
 

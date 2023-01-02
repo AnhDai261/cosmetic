@@ -18,7 +18,7 @@ const Header = () => {
     }
   }, []);
   // const toggleCart = () => {
-  //   axios.get("http://localhost:6969/api/getAllItem").then((res) => {
+  //   axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/getAllItem`).then((res) => {
   //     let data = res.data.data;
   //     setProduct(data);
   //     setUpdate(null);

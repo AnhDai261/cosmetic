@@ -32,18 +32,20 @@ const Card = ({ dataSearch }) => {
   }, []);
 
   // useEffect(() => {
-  //   axios.get("http://localhost:6969/api/findItem").then((res) => {
+  //   axios.get("${process.env.REACT_APP_BACKEND_URL}/api/findItem").then((res) => {
   //     let data = res.data.data;
   //     setProduct(data);
   //   });
   // }, []);
 
   const toggleDetail = () => {
-    axios.get("http://localhost:6969/api/getAllItem").then((res) => {
-      let data = res.data.data;
-      setProduct(data);
-      setCheckLog(null);
-    });
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/getAllItem`)
+      .then((res) => {
+        let data = res.data.data;
+        setProduct(data);
+        setCheckLog(null);
+      });
 
     setOpen(!open);
   };
@@ -55,14 +57,16 @@ const Card = ({ dataSearch }) => {
   };
 
   const handleDetail = (id) => {
-    axios.get(`http://localhost:6969/api/getOneItem?id=${id}`).then((res) => {
-      if (res.data.errCode === 0) {
-        setCheckLog(res.data.data);
-        setOpen(true);
-      } else {
-        toast.error(res.data.errMessage);
-      }
-    });
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/getOneItem?id=${id}`)
+      .then((res) => {
+        if (res.data.errCode === 0) {
+          setCheckLog(res.data.data);
+          setOpen(true);
+        } else {
+          toast.error(res.data.errMessage);
+        }
+      });
   };
 
   const handleBuy = (data) => {

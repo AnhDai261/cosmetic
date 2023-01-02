@@ -58,7 +58,7 @@ const Product = () => {
         if (xoa.errCode === 0) {
           toast.success(xoa.errMessage);
           axios
-            .get("${process.env.REACT_APP_BACKEND_URL}/api/getAllItem")
+            .get(`${process.env.REACT_APP_BACKEND_URL}/api/getAllItem`)
             .then((res) => {
               let data = res.data.data;
               setProduct(data);

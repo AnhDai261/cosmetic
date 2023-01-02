@@ -24,7 +24,10 @@ function SignInAdmin() {
     setLoading(true);
     setTimeout(() => {
       axios
-        .post(`http://localhost:6969/api/loginAdmin`, { email, password })
+        .post(`${process.env.REACT_APP_BACKEND_URL}/api/loginAdmin`, {
+          email,
+          password,
+        })
         .then((res) => {
           if (res.data.errCode === 0 && res.data.data.role_id === 1) {
             toast.success(res.data.errMessage);

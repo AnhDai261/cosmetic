@@ -15,51 +15,61 @@ const Product = () => {
   };
 
   const toggleModal = () => {
-    axios.get("http://localhost:6969/api/getAllItem").then((res) => {
-      let data = res.data.data;
-      setProduct(data);
-      setUpdate(null);
-    });
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/getAllItem`)
+      .then((res) => {
+        let data = res.data.data;
+        setProduct(data);
+        setUpdate(null);
+      });
 
     setShowModal(!showModal);
   };
 
   useEffect(() => {
-    axios.get("http://localhost:6969/api/getAllItem").then((res) => {
-      let data = res.data.data;
-      setProduct(data);
-    });
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/getAllItem`)
+      .then((res) => {
+        let data = res.data.data;
+        console.log("dâta:: ", res);
+
+        setProduct(data);
+      });
   }, []);
   const handleUpdate = (id) => {
-    axios.get(`http://localhost:6969/api/getOneItem?id=${id}`).then((res) => {
-      if (res.data.errCode === 0) {
-        setUpdate(res.data.data);
-        setShowModal(true);
-      } else {
-        toast.error(res.data.errMessage);
-      }
-    });
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/getOneItem?id=${id}`)
+      .then((res) => {
+        if (res.data.errCode === 0) {
+          setUpdate(res.data.data);
+          setShowModal(true);
+        } else {
+          toast.error(res.data.errMessage);
+        }
+      });
   };
 
   const handleDelete = async (id) => {
     axios
-      .delete(`http://localhost:6969/api/deleteItem?id=${id}`)
+      .delete(`${process.env.REACT_APP_BACKEND_URL}/api/deleteItem?id=${id}`)
       .then((res) => {
         console.log("tra ve: ", res);
         let xoa = res.data;
         if (xoa.errCode === 0) {
           toast.success(xoa.errMessage);
-          axios.get("http://localhost:6969/api/getAllItem").then((res) => {
-            let data = res.data.data;
-            setProduct(data);
-          });
+          axios
+            .get("${process.env.REACT_APP_BACKEND_URL}/api/getAllItem")
+            .then((res) => {
+              let data = res.data.data;
+              setProduct(data);
+            });
         } else {
           toast.error(xoa.errMessage);
         }
         //   let data = res.data.data;
       });
   };
-
+  console.log("product:: ", product);
   return (
     <>
       <>
@@ -136,81 +146,91 @@ const Product = () => {
                 </td>
               </tr>
             </thead>
-            {product.map((item, index) => {
-              return (
-                <>
-                  <tbody key={index}>
-                    <tr
-                      v-for="product in products"
-                      class="hover:bg-gray-100 transition-colors group"
-                    >
-                      <td class="flex gap-x-4 items-center py-4 pl-10">
-                        <input
-                          type="checkbox"
-                          class="w-6 h-6 text-indigo-600 rounded-md border-gray-300"
-                        />
-                        <img
-                          src={item.image}
-                          alt=""
-                          class="w-40 aspect-[3/2] rounded-lg object-cover object-top border border-gray-200"
-                        />
-                        <div>
-                          <a
-                            href="#"
-                            class="text-lg font-semibold text-gray-700"
-                          >
-                            {item.name}
-                          </a>
-                          <div class="overflow-hidden w-80 h-20 font-medium text-gray-400">
-                            {item.describe}
-                          </div>
-                        </div>
-                      </td>
-                      <td class="font-medium text-center">
-                        {item.price.toLocaleString()} vnđ
-                      </td>
-                      <td class="font-medium text-center">{item.amount}</td>
-                      <td class="text-center">
-                        <span class="font-medium">{item.Categorie.name}</span>
-                      </td>
-                      <td class="text-center">
-                        <span class="font-medium">{item.Brand.name}</span>
-                      </td>
-                      <td>
-                        <div class="flex gap-x-2 justify-center items-center">
-                          <a
-                            href="#"
-                            v-for="icon in product.platformIcons"
-                            class="p-2 bg-gray-200 rounded-md hover:bg-gray-300"
-                          >
-                            {item.status}
-                          </a>
-                        </div>
-                      </td>
-                      <td>
-                        <span class="inline-block w-20 group-hover:hidden">
-                          Tác Vụ
-                        </span>
-                        <div class="hidden group-hover:flex group-hover:w-20 group-hover:items-center group-hover:text-gray-500 group-hover:gap-x-2">
-                          <button
-                            onClick={() => handleUpdate(item.id)}
-                            class="p-2 hover:rounded-md hover:bg-gray-200"
-                          >
-                            Chỉnh Sửa
-                          </button>
-                          <button
-                            onClick={() => handleDelete(item.id)}
-                            class="p-2 hover:rounded-md hover:bg-gray-200"
-                          >
-                            Xóa
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </>
-              );
-            })}
+            {product === undefined && product ? (
+              <div className="text-center text-red-500">
+                Chưa thêm sản phẩm hoặc không tìm thấy sản phẩm
+              </div>
+            ) : (
+              <>
+                {product.map((item, index) => {
+                  return (
+                    <>
+                      <tbody key={index}>
+                        <tr
+                          v-for="product in products"
+                          class="hover:bg-gray-100 transition-colors group"
+                        >
+                          <td class="flex gap-x-4 items-center py-4 pl-10">
+                            <input
+                              type="checkbox"
+                              class="w-6 h-6 text-indigo-600 rounded-md border-gray-300"
+                            />
+                            <img
+                              src={item.image}
+                              alt=""
+                              class="w-40 aspect-[3/2] rounded-lg object-cover object-top border border-gray-200"
+                            />
+                            <div>
+                              <a
+                                href="#"
+                                class="text-lg font-semibold text-gray-700"
+                              >
+                                {item.name}
+                              </a>
+                              <div class="overflow-hidden w-80 h-20 font-medium text-gray-400">
+                                {item.describe}
+                              </div>
+                            </div>
+                          </td>
+                          <td class="font-medium text-center">
+                            {item.price.toLocaleString()} vnđ
+                          </td>
+                          <td class="font-medium text-center">{item.amount}</td>
+                          <td class="text-center">
+                            <span class="font-medium">
+                              {item.Categorie.name}
+                            </span>
+                          </td>
+                          <td class="text-center">
+                            <span class="font-medium">{item.Brand.name}</span>
+                          </td>
+                          <td>
+                            <div class="flex gap-x-2 justify-center items-center">
+                              <a
+                                href="#"
+                                v-for="icon in product.platformIcons"
+                                class="p-2 bg-gray-200 rounded-md hover:bg-gray-300"
+                              >
+                                {item.status}
+                              </a>
+                            </div>
+                          </td>
+                          <td>
+                            <span class="inline-block w-20 group-hover:hidden">
+                              Tác Vụ
+                            </span>
+                            <div class="hidden group-hover:flex group-hover:w-20 group-hover:items-center group-hover:text-gray-500 group-hover:gap-x-2">
+                              <button
+                                onClick={() => handleUpdate(item.id)}
+                                class="p-2 hover:rounded-md hover:bg-gray-200"
+                              >
+                                Chỉnh Sửa
+                              </button>
+                              <button
+                                onClick={() => handleDelete(item.id)}
+                                class="p-2 hover:rounded-md hover:bg-gray-200"
+                              >
+                                Xóa
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </>
+                  );
+                })}
+              </>
+            )}
           </table>
         </div>
       </div>

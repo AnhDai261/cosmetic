@@ -58,7 +58,7 @@ const ProductModal = ({ toggleModal, data }) => {
     //Call api
     const fetchApi = async () => {
       let res = await axios
-        .get(`http://localhost:6969/api/getallcategorie`)
+        .get(`${process.env.REACT_APP_BACKEND_URL}/api/getallcategorie`)
         .then((res) => {
           return res;
         });
@@ -85,32 +85,36 @@ const ProductModal = ({ toggleModal, data }) => {
     e.preventDefault();
 
     setTimeout(() => {
-      axios.post(`http://localhost:6969/api/addItem`, { state }).then((res) => {
-        if (res.data.errCode === 0) {
-          toast.success(res.data.errMessage);
-          toggleModal();
-          return res;
-        } else {
-          toast.error(res.data.errMessage);
-        }
-      });
+      axios
+        .post(`${process.env.REACT_APP_BACKEND_URL}/api/addItem`, { state })
+        .then((res) => {
+          if (res.data.errCode === 0) {
+            toast.success(res.data.errMessage);
+            toggleModal();
+            return res;
+          } else {
+            toast.error(res.data.errMessage);
+          }
+        });
     }, 1000);
   };
   const handleUpdate = (e) => {
     e.preventDefault();
 
     setTimeout(() => {
-      axios.put(`http://localhost:6969/api/editItem`, { state }).then((res) => {
-        if (res.data.errCode === 0) {
-          toast.success(res.data.errMessage);
+      axios
+        .put(`${process.env.REACT_APP_BACKEND_URL}/api/editItem`, { state })
+        .then((res) => {
+          if (res.data.errCode === 0) {
+            toast.success(res.data.errMessage);
 
-          // console.log("Checek: ");
-          toggleModal();
-          return res;
-        } else {
-          toast.error(res.data.errMessage);
-        }
-      });
+            // console.log("Checek: ");
+            toggleModal();
+            return res;
+          } else {
+            toast.error(res.data.errMessage);
+          }
+        });
     }, 1000);
   };
   const handleOnchangePhoto = async (e) => {
@@ -135,11 +139,13 @@ const ProductModal = ({ toggleModal, data }) => {
   };
 
   useEffect(() => {
-    axios.get("http://localhost:6969/api/getAllBrand").then((res) => {
-      // console.log("Check data brand: ", res);
-      let data = res.data.data;
-      setBrand(data);
-    });
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/getAllBrand`)
+      .then((res) => {
+        // console.log("Check data brand: ", res);
+        let data = res.data.data;
+        setBrand(data);
+      });
   }, []);
 
   return (

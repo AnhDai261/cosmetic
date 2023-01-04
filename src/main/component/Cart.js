@@ -163,7 +163,7 @@ const Cart = ({ toggleCart, open }) => {
                         Shipping and taxes calculated at checkout.
                       </p>
                       <div className="mt-6">
-                        <Link
+                        <div
                           onClick={handleOnBuy}
                           className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                         >
@@ -171,7 +171,7 @@ const Cart = ({ toggleCart, open }) => {
                           {price.length === 0 ? null : (
                             <>- {price.toLocaleString()} vnđ</>
                           )}
-                        </Link>
+                        </div>
                       </div>
                       <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                         <p>

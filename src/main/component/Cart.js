@@ -1,12 +1,22 @@
 import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 const Cart = ({ toggleCart, open }) => {
+  const navigate = useNavigate();
   const [product, setProduct] = useState([]);
   const [price, setPrice] = useState([]);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const items = JSON.parse(localStorage.getItem("currentUser"));
+    if (items) {
+      setUser(items);
+    }
+  }, [setUser]);
 
   useEffect(() => {
     let res = getDataStore();
@@ -35,6 +45,14 @@ const Cart = ({ toggleCart, open }) => {
         return bienNho + thangHienTai;
       });
       setPrice(total);
+    }
+  };
+  const handleOnBuy = () => {
+    if (user && user.email !== null) {
+      navigate("/checkout");
+    } else {
+      navigate("/signin");
+      toast.error("Vui lòng đăng nhập");
     }
   };
 
@@ -146,7 +164,7 @@ const Cart = ({ toggleCart, open }) => {
                       </p>
                       <div className="mt-6">
                         <Link
-                          to="/checkout"
+                          onClick={handleOnBuy}
                           className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                         >
                           Checkout{" "}

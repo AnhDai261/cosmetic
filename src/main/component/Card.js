@@ -11,7 +11,14 @@ const Card = ({ dataSearch }) => {
   const [open, setOpen] = useState(false);
   const [checkLog, setCheckLog] = useState(null);
   const [state, setState] = useState([]);
-  console.log("data search: ", dataSearch);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const items = JSON.parse(localStorage.getItem("currentUser"));
+    if (items) {
+      setUser(items);
+    }
+  }, [setUser]);
 
   useEffect(() => {
     if (dataSearch && dataSearch.length > 0) {
@@ -70,27 +77,31 @@ const Card = ({ dataSearch }) => {
   };
 
   const handleBuy = (data) => {
-    // localStorage.getItem("product", JSON.stringify(Arr));
-    if (state && state.length > 0) {
-      let test = state.find((item) => {
-        return item.id === data.id;
-      });
+    if (user && user.email !== null) {
+      if (state && state.length > 0) {
+        let test = state.find((item) => {
+          return item.id === data.id;
+        });
 
-      if (test === undefined) {
-        let raBien = state;
-        localStorage.setItem("product", JSON.stringify([...raBien, data]));
-        setState([...raBien, data]);
-        navigate("/checkout");
+        if (test === undefined) {
+          let raBien = state;
+          localStorage.setItem("product", JSON.stringify([...raBien, data]));
+          setState([...raBien, data]);
+          navigate("/checkout");
+        } else {
+          navigate("/checkout");
+        }
       } else {
-        navigate("/checkout");
+        let Arr = [];
+        if (data) {
+          Arr.push(data);
+        }
+        localStorage.setItem("product", JSON.stringify(Arr));
+        setState(Arr);
       }
     } else {
-      let Arr = [];
-      if (data) {
-        Arr.push(data);
-      }
-      localStorage.setItem("product", JSON.stringify(Arr));
-      setState(Arr);
+      navigate("/signin");
+      toast.error("Vui lòng đăng nhập");
     }
   };
   return (

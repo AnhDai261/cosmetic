@@ -17,15 +17,17 @@ const Header = () => {
       setState(items);
     }
   }, []);
-  // const toggleCart = () => {
-  //   axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/getAllItem`).then((res) => {
-  //     let data = res.data.data;
-  //     setProduct(data);
-  //     setUpdate(null);
-  //   });
+  const toggleCart = () => {
+    // axios
+    //   .get(`${process.env.REACT_APP_BACKEND_URL}/api/getAllItem`)
+    //   .then((res) => {
+    //     let data = res.data.data;
+    //     setProduct(data);
+    //     setUpdate(null);
+    //   });
 
-  //   setOpen(!open);
-  // };
+    setOpen(!open);
+  };
 
   let getData = JSON.parse(localStorage.getItem("product"));
   useEffect(() => {
@@ -56,7 +58,7 @@ const Header = () => {
     <div>
       {open ? (
         <>
-          <Cart open={open} />
+          <Cart open={open} toggleCart={() => toggleCart()} />
         </>
       ) : null}
       <header className="fixed top-0 left-0 z-20 w-full shadow dark:bg-gray-800 dark:border-gray-600">

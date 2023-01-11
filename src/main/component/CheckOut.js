@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -75,7 +76,7 @@ const CheckOut = () => {
     setState(copyState);
   };
 
-  const handlePay = () => {
+  const handlePay = async () => {
     if (
       state.fullName === "" ||
       state.address === "" ||
@@ -83,14 +84,36 @@ const CheckOut = () => {
     ) {
       toast.error("Bạn chưa nhập đủ thông tin");
     } else {
-      toast.success("Đặt hàng thành công");
-      localStorage.removeItem("product");
-      setTimeout(() => {
-        navigate("/store");
-      }, 1000);
+      const res = await getDataStore();
+      const user = await JSON.parse(localStorage.getItem("currentUser"));
+
+      if (res && res.length > 0) {
+        let arrItem = [];
+
+        res.forEach((item) => {
+          arrItem.push(+item.id);
+
+          return arrItem;
+        });
+
+        axios
+          .post(`${process.env.REACT_APP_BACKEND_URL}/api/createOrder`, {
+            userId: user.id,
+            itemId: arrItem.toString(),
+            priceTotal: price,
+            quantity: arrItem.length,
+            status: "new",
+          })
+          .then((res) => {
+            console.log("checkkk res from order", res.data);
+          });
+      }
+
+      toast.success("Đặt hàng thành công !");
+      // localStorage.removeItem("product");
+      // navigate("/");
     }
   };
-
   return (
     <div className="flex justify-center items-center">
       <div className="py-16 px-4 md:px-6 2xl:px-0 flex justify-center items-center 2xl:mx-auto 2xl:container">

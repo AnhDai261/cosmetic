@@ -13,6 +13,8 @@ import LayoutContact from "./main/pages/LayoutContact";
 import CheckOut from "./main/component/CheckOut";
 import LayoutCheckOut from "./main/pages/LayoutCheckOut";
 import SignInAdmin from "./dashboard/page/SignInAdmin";
+import Order from "./dashboard/page/Order";
+import User from "./dashboard/page/User";
 
 function App() {
   return (
@@ -45,6 +47,22 @@ function App() {
             element={
               <LayoutDashboard>
                 <Home />
+              </LayoutDashboard>
+            }
+          />
+          <Route
+            path="/dashboard/user"
+            element={
+              <LayoutDashboard>
+                <User />
+              </LayoutDashboard>
+            }
+          />
+          <Route
+            path="/dashboard/order"
+            element={
+              <LayoutDashboard>
+                <Order />
               </LayoutDashboard>
             }
           />
